@@ -960,6 +960,10 @@ p {
 
 @media (max-width: 767px) {
 
+    .video-bg {
+        display: none;
+    }
+
     .tag {
         padding: 0.4rem 0.8rem;
         font-size: 0.8rem;
