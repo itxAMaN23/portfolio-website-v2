@@ -1,181 +1,147 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger);
 
-    gsap.from(".navbar", {
-        y: -100,
-        opacity: 0,
-        duration: 1,
-        ease: "power2.out"
-    });
+    const navTimeline = gsap.timeline();
+    navTimeline
+        .from(".navbar", {
+            y: -100,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out"
+        })
+        .from(".nav-links li", {
+            opacity: 0,
+            y: -20,
+            duration: 0.6,
+            stagger: 0.2,
+            ease: "power2.out"
+        }, "-=0.4")
+        .from(".social-links a", {
+            opacity: 0,
+            y: -20,
+            duration: 0.6,
+            stagger: 0.2,
+            ease: "power2.out"
+        }, "-=0.4");
 
-    gsap.from(".nav-links li", {
-        opacity: 0,
-        y: -20,
-        duration: 1,
-        ease: "power2.out",
-        stagger: 0.3,
-    });
 
-    gsap.from(".social-links a", {
-        opacity: 0,
-        y: -20,
-        duration: 1,
-        ease: "power2.out",
-        stagger: 0.3,
-    });
+    const heroTimeline = gsap.timeline({ delay: 0.3 });
+    heroTimeline
+        .from(".hero-content .tag", {
+            x: -50,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out"
+        })
+        .from(".hero-content h1", {
+            x: -50,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out"
+        }, "-=0.4")
+        .from(".hero-content p", {
+            x: -50,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out"
+        }, "-=0.4")
+        .from(".cta-button", {
+            x: -50,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out"
+        }, "-=0.4")
+        .from(".cta-button i", {
+            y: 25,
+            opacity: 0,
+            duration: 0.6,
+            ease: "back.out(1.7)"
+        }, "-=0.4");
 
-    gsap.from(".hero-content .tag", {
-        x: -100,
-        duration: 1,
-        opacity: 0,
-        ease: "power2.out",
-        delay: 0.5,
-    });
 
-    gsap.from(".hero-content h1", {
-        x: -100,
-        duration: 1,
-        opacity: 0,
-        ease: "power2.out",
-        delay: 0.75,
-    });
-
-    gsap.from(".hero-content p", {
-        x: -100,
-        duration: 1,
-        opacity: 0,
-        ease: "power2.out",
-        delay: 1,
-    });
-
-    gsap.from(".cta-button", {
-        x: -100,
-        duration: 1,
-        opacity: 0,
-        ease: "power2.out",
-        delay: 1.25,
-    });
-
-    gsap.from(".cta-button i", {
-        y: 25,
-        duration: 1,
-        opacity: 0,
-        ease: "power2.out",
-        delay: 1.35,
-    });
-
-    gsap.from(".about .section-title", {
-        scrollTrigger: {
-            trigger: ".about .section-title",
-            scroller: "body",
-            start: "top 40%",
-            end: "top 60%",
-            ease: "power2.out",
-            scrub: 2
+    const sectionAnimations = [
+        {
+            element: ".about .section-title",
+            start: "top 80%"
         },
-        x: -100,
-        duration: 1,
-        opacity: 0,
-    });
-
-    gsap.from(".bio p", {
-        scrollTrigger: {
-            trigger: ".bio p",
-            start: "top 50%",
-            end: "top 30%",
-            ease: "power2.out",
-            scrub: 2
+        {
+            element: ".bio p",
+            start: "top 75%",
+            stagger: true
         },
-        x: -50,
-        duration: 1,
-        opacity: 0,
-        stagger: 0.3
+        {
+            element: ".about-container .tech-stack",
+            start: "top 75%"
+        },
+        {
+            element: ".skills .section-title",
+            start: "top 80%"
+        },
+        {
+            element: ".skills-text p",
+            start: "top 75%",
+            stagger: true
+        },
+        {
+            element: ".projects .section-title",
+            start: "top 80%"
+        }
+    ];
+
+    sectionAnimations.forEach(animation => {
+        gsap.from(animation.element, {
+            scrollTrigger: {
+                trigger: animation.element,
+                start: animation.start,
+                end: "top 40%",
+                scrub: 1,
+                toggleActions: "play none none reverse"
+            },
+            x: -50,
+            opacity: 0,
+            duration: 1,
+            ease: "power2.out",
+            ...(animation.stagger && { stagger: 0.2 })
+        });
     });
 
     gsap.from(".stat-item", {
         scrollTrigger: {
             trigger: ".stat-item",
-            start: "top 80%",
-            end: "top 70%",
-            ease: "power2.out",
-            scrub: 2,
+            start: "top 85%",
+            end: "top 40%",
+            scrub: 1
         },
-        duration: 1.5,
+        y: 30,
         opacity: 0,
-        stagger: 0.2,
-        delay: 0.5
+        duration: 0.8,
+        stagger: {
+            each: 0.2,
+            from: "start"
+        },
+        ease: "power2.out"
     });
 
-    gsap.from(".about-container .tech-stack", {
-        opacity: 0,
-        duration: 1,
-        ease: "power2.out",
-        delay: 0.5,
-        scrollTrigger: {
-            trigger: ".about-container .tech-stack",
-            start: "top 50%",
-            end: "top 30%",
-            ease: "power2.out",
-            scrub: 2,
-        }
-    });
-
-    gsap.utils.toArray(".tech-item i").forEach((icon) => {
+    const techItems = gsap.utils.toArray(".tech-item i");
+    techItems.forEach((icon, index) => {
         gsap.fromTo(icon,
-            { opacity: 0, x: 50, stagger: 0.3 },
             {
-                opacity: 1, x: 0, duration: 1, ease: "power2.out",
+                opacity: 0,
+                x: 30
+            },
+            {
+                opacity: 1,
+                x: 0,
+                duration: 0.5,
+                ease: "power2.out",
                 scrollTrigger: {
                     trigger: icon,
-                    start: "top 70%",
-                    end: "top 60%",
+                    start: "top 85%",
                     toggleActions: "play none none reverse"
-                }
+                },
+                delay: index * 0.1
             }
         );
     });
-
-    gsap.from(".skills .section-title", {
-        scrollTrigger: {
-            trigger: ".skills .section-title",
-            start: "top 40%",
-            end: "top 60%",
-            ease: "power2.out",
-            scrub: 2,
-        },
-        x: -100,
-        duration: 1,
-        opacity: 0,
-    });
-
-    gsap.from(".skills-text p", {
-        scrollTrigger: {
-            trigger: ".skills-text p",
-            start: "top 50%",
-            end: "top 30%",
-            ease: "power2.out",
-            scrub: 2,
-        },
-        x: -50,
-        duration: 1,
-        opacity: 0,
-        stagger: 0.3
-    });
-
-    gsap.from(".projects .section-title", {
-        scrollTrigger: {
-            trigger: ".projects .section-title",
-            start: "top 80%",
-            end: "top 60%",
-            ease: "power2.out",
-            scrub: 2,
-        },
-        x: -100,
-        duration: 3,
-        opacity: 0,
-    });
-    
-    
-})
-
+});
