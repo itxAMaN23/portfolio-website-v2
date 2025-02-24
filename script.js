@@ -46,18 +46,21 @@ document.addEventListener("DOMContentLoaded", function () {
             duration: 0.8,
             ease: "power2.out"
         }, "-=0.4")
-        .from(".cta-button", {
-            x: -50,
-            opacity: 0,
-            duration: 0.8,
-            ease: "power2.out"
-        }, "-=0.4")
-        .from(".cta-button i", {
-            y: 25,
+        .from(".hero-content > .cta-button", {
+            y: 30,
             opacity: 0,
             duration: 0.6,
+            stagger: 0.2,
             ease: "back.out(1.7)"
-        }, "-=0.4");
+        }, "-=0.4")
+        .from(".hero-content > .cta-button i", {
+            y: 15,
+            opacity: 0,
+            duration: 0.4,
+            stagger: 0.1,
+            ease: "back.out(2)",
+            scale: 0.5
+        }, "-=0.2");
 
 
     const sectionAnimations = [
@@ -144,4 +147,35 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         );
     });
+
+    // Initialize Lenis
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        smoothTouch: false,
+        touchMultiplier: 2
+    });
+
+    // Create a function to handle the RAF
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+
+    // Start the animation loop
+    requestAnimationFrame(raf);
+
+    // Connect Lenis to ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+
+    // Tell GSAP to use Lenis's scroll position
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+
+    // Optional: Prevent GSAP's ticker from affecting Lenis
+    gsap.ticker.lagSmoothing(0);
 });
